@@ -528,7 +528,11 @@ public:
         , m_running(true)
         , m_databaseUuid(databaseUuid)
     {
-        start(QThread::IdlePriority);
+        QThread::Priority priority(QThread::InheritPriority);
+        if (QThread::idealThreadCount() == 1) {
+            priority = QThread::IdlePriority;
+        }
+        start(priority);
     }
 
     ~JobThread()
